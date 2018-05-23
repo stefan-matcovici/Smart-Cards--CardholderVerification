@@ -1,0 +1,12 @@
+Digest for ro/uaic/info/sca/cardholderapp/javacard/Header.cap		[SHA-256: 3671fde6cd99e6319c560dc752fce2223f3ce457cb75041371ef6078bc10a72e]
+Digest for ro/uaic/info/sca/cardholderapp/javacard/Class.cap		[SHA-256: d94298392fc659dc6559a0f54479962c46a7eab03361e087552e0a5ad5b6aeab]
+Digest for ro/uaic/info/sca/cardholderapp/javacard/StaticField.cap		[SHA-256: e323b02b3bb28c9f72df5cf8cf62505b067098d5ebc548e9f5c6d5183feba6fa]
+Digest for ro/uaic/info/sca/cardholderapp/javacard/Debug.cap		[SHA-256: 85196e5d9a7d1a949ec63a8179817246a636e8eaba92bd1b58abca2ee828f33c]
+Digest for ro/uaic/info/sca/cardholderapp/javacard/Applet.cap		[SHA-256: 4414e9f3eb31648d0be47b5715b2867ae32edfc153b270c2c7b28942eaa17f7d]
+Digest for ro/uaic/info/sca/cardholderapp/javacard/Method.cap		[SHA-256: 1f6aee94504a57a75aeace1f28811cdb3c647bd685c80385122f867cda9925bc]
+Digest for ro/uaic/info/sca/cardholderapp/javacard/Descriptor.cap		[SHA-256: febe27ef4a50e830f9bcc94a1315d6007da5b8e95fcc9a59b507c6b9d084b137]
+Digest for ro/uaic/info/sca/cardholderapp/javacard/Import.cap		[SHA-256: fbd8b172aed3daa43bd2e7aa45cc4cef7b6967a649cc1c38acb969e414cb963c]
+Digest for ro/uaic/info/sca/cardholderapp/javacard/ConstantPool.cap		[SHA-256: b571340f1a34d47e49c8338c1ac651b8de3ceda37b3ee3475721862e51c15fcb]
+Digest for ro/uaic/info/sca/cardholderapp/javacard/RefLocation.cap		[SHA-256: 03d554ae6ec93cdfd4a8db20a0dfadb47912679279677277c52148c1ab2c47c9]
+Digest for ro/uaic/info/sca/cardholderapp/javacard/Directory.cap		[SHA-256: 6d4265435c39314feb509cf493a40b67940b107be9b27c508ef00bd2f1d5c0d7]
+Verification completed with 0 warnings and 0 errors.

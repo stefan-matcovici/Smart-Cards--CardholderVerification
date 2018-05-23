@@ -1,0 +1,1249 @@
+// converted by version  [v3.0.5]
+// on Tue May 22 10:50:35 EEST 2018
+
+.package ro/uaic/info/sca/cardholderapp {
+	.aid 0x6:0x6:0x6:0x6:0x6:0x0;
+	.version 1.0;
+
+	.imports {
+		0xA0:0x0:0x0:0x0:0x62:0x1:0x1 1.6;		//javacard/framework
+		0xA0:0x0:0x0:0x0:0x62:0x1:0x2 1.6;		//javacard/security
+		0xA0:0x0:0x0:0x0:0x62:0x2:0x1 1.6;		//javacardx/crypto
+		0xA0:0x0:0x0:0x0:0x62:0x0:0x1 1.0;		//java/lang
+	}
+
+	.applet {
+		0x6:0x6:0x6:0x6:0x6:0x1 CardHolderVerificationApplet;
+	}
+
+	.constantPool {
+		// 0
+		instanceFieldRef 0.9 CardHolderVerificationApplet/pin;
+		// 1
+		instanceFieldRef short CardHolderVerificationApplet/pinSize;
+		// 2
+		instanceFieldRef boolean CardHolderVerificationApplet/isValidated;
+		// 3
+		instanceFieldRef short CardHolderVerificationApplet/balance;
+		// 4
+		staticMethodRef 0.9.0(BB)V;		// javacard/framework/OwnerPIN.<init>(BB)V
+		// 5
+		staticMethodRef CardHolderVerificationApplet/<init>([BSB)V;
+		// 6
+		.classRef CardHolderVerificationApplet;
+		// 7
+		virtualMethodRef 0.9.8([BSB)V;		// update([BSB)V
+		// 8
+		virtualMethodRef 0.3.1()V;		// register()V
+		// 9
+		virtualMethodRef 0.10.1()[B;		// getBuffer()[B
+		// 10
+		virtualMethodRef 0.10.14()Z;		// isISOInterindustryCLA()Z
+		// 11
+		staticMethodRef 0.7.1(S)V;		// javacard/framework/ISOException.throwIt(S)V
+		// 12
+		staticMethodRef CardHolderVerificationApplet/getCVMList(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 13
+		staticMethodRef CardHolderVerificationApplet/getBalance(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 14
+		staticMethodRef CardHolderVerificationApplet/credit(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 15
+		staticMethodRef CardHolderVerificationApplet/verifyPlain(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 16
+		staticMethodRef CardHolderVerificationApplet/debit(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 17
+		staticMethodRef CardHolderVerificationApplet/verifyNone(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 18
+		staticMethodRef CardHolderVerificationApplet/verifyEncrypted(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 19
+		.classRef 1.12;		// javacard/security/CryptoException
+		// 20
+		virtualMethodRef 0.10.6()S;		// setIncomingAndReceive()S
+		// 21
+		staticMethodRef 1.13.0(BSZ)Ljavacard/security/Key;;		// javacard/security/KeyBuilder.buildKey(BSZ)Ljavacard/security/Key;
+			.descriptor	Ljavacard/security/Key;	1.0;
+
+		// 22
+		.classRef 1.8;		// javacard/security/RSAPrivateKey
+		// 23
+		staticMethodRef 2.1.0(BZ)Ljavacardx/crypto/Cipher;;		// javacardx/crypto/Cipher.getInstance(BZ)Ljavacardx/crypto/Cipher;
+			.descriptor	Ljavacardx/crypto/Cipher;	2.1;
+
+		// 24
+		virtualMethodRef 2.1.3(Ljavacard/security/Key;B)V;		// init(Ljavacard/security/Key;B)V
+			.descriptor	Ljavacard/security/Key;	1.0;
+
+		// 25
+		virtualMethodRef 2.1.1([BSS[BS)S;		// doFinal([BSS[BS)S
+		// 26
+		virtualMethodRef 0.9.1([BSB)Z;		// check([BSB)Z
+		// 27
+		staticMethodRef 0.3.0()V;		// javacard/framework/Applet.<init>()V
+		// 28
+		virtualMethodRef 1.12.1()S;		// getReason()S
+		// 29
+		.classRef 0.9;		// javacard/framework/OwnerPIN
+		// 30
+		virtualMethodRef 0.10.7()S;		// setOutgoing()S
+		// 31
+		virtualMethodRef 0.10.9(S)V;		// setOutgoingLength(S)V
+		// 32
+		virtualMethodRef 0.10.4(SS)V;		// sendBytes(SS)V
+		// 33
+		staticMethodRef CardHolderVerificationApplet/intToBytes(II)[B;
+		// 34
+		staticMethodRef 3.0.0()V;		// java/lang/Object.<init>()V
+	}
+
+	.class public CardHolderVerificationApplet 0 extends 0.3 {		// extends javacard/framework/Applet
+
+		.fields {
+			 0.9 pin 0;		// Ljavacard/framework/OwnerPIN;
+			 short balance 1;		// S
+			 short pinSize 2;		// S
+			 boolean isValidated 3;		// Z
+			static final byte Wallet_CLA = -128;		// B
+			static final byte VERIFY_NONE = 32;		// B
+			static final byte VERIFY_PLAINTEXT = 33;		// B
+			static final byte VERIFY_ENCRYPTED = 34;		// B
+			static final byte CREDIT = 48;		// B
+			static final byte DEBIT = 64;		// B
+			static final byte GET_BALANCE = 80;		// B
+			static final byte CVM_LIST = 112;		// B
+			static final short MAX_BALANCE = 10000;		// S
+			static final short MAX_TRANSACTION_AMOUNT = 1000;		// S
+			static final short MAX_POINTS_AMOUNT = 300;		// S
+			static final byte PIN_TRY_LIMIT = 3;		// B
+			static final byte MAX_PIN_SIZE = 8;		// B
+			static final short SW_VERIFICATION_FAILED = 25344;		// S
+			static final short SW_PIN_VERIFICATION_REQUIRED = 25345;		// S
+			static final short SW_INVALID_TRANSACTION_AMOUNT = 27267;		// S
+			static final short SW_EXCEED_MAXIMUM_BALANCE = 27268;		// S
+			static final short SW_NEGATIVE_BALANCE = 27269;		// S
+			static final short CVR_1 = 7942;		// S
+			static final short CVR_2 = 264;		// S
+			static final short CVR_3 = 1033;		// S
+			static final int lowAmount = 50;		// I
+			static final int highAmount = 100;		// I
+		}
+
+		.publicMethodTable 7 {
+			equals(Ljava/lang/Object;)Z;
+			register()V;
+			register([BSB)V;
+			selectingApplet()Z;
+			deselect()V;
+			getShareableInterfaceObject(Ljavacard/framework/AID;B)Ljavacard/framework/Shareable;;
+			select()Z;
+			process(Ljavacard/framework/APDU;)V;
+		}
+
+		.packageMethodTable 0 {
+		}
+
+		.method public static install([BSB)V 0 {
+			.stack 4;
+			.locals 0;
+
+				L0:	new 6;		// ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet
+					aload_0;
+					sload_1;
+					sload_2;
+					invokespecial 5;		// ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.<init>([BSB)V
+					return;
+		}
+
+		.method protected <init>([BSB)V 1 {
+			.stack 5;
+			.locals 3;
+
+				L0:	aload_0;
+					invokespecial 27;		// javacard/framework/Applet.<init>()V
+					aload_0;
+					new 29;		// javacard/framework/OwnerPIN
+					dup;
+					sconst_3;
+					bspush 8;
+					invokespecial 4;		// javacard/framework/OwnerPIN.<init>(BB)V
+					putfield_a 0;		// reference ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.pin
+					aload_1;
+					sload_2;
+					baload;
+					sstore 4;
+				L1:	sload_2;
+					sload 4;
+					sadd;
+					sconst_1;
+					sadd;
+					sstore_2;
+					aload_1;
+					sload_2;
+					baload;
+					sstore 5;
+				L2:	sload_2;
+					sload 5;
+					sadd;
+					sconst_1;
+					sadd;
+					sstore_2;
+					aload_1;
+					sload_2;
+					baload;
+					sstore 6;
+				L3:	sload 6;
+					putfield_s_this 1;		// short ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.pinSize
+					getfield_a_this 0;		// reference ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.pin
+					aload_1;
+					sload_2;
+					sconst_1;
+					sadd;
+					sload 6;
+					invokevirtual 7;		// update([BSB)V
+					aload_0;
+					invokevirtual 8;		// register()V
+					return;
+		}
+
+		.method public process(Ljavacard/framework/APDU;)V 7 {
+			.stack 2;
+			.locals 1;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 9;		// getBuffer()[B
+					astore_2;
+				L1:	aload_1;
+					invokevirtual 10;		// isISOInterindustryCLA()Z
+					ifeq L5;
+				L2:	aload_2;
+					sconst_1;
+					baload;
+					bspush -92;
+					if_scmpne L4;
+				L3:	return;
+				L4:	sspush 28160;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L5:	aload_2;
+					sconst_0;
+					baload;
+					bspush -128;
+					if_scmpeq L7;
+				L6:	sspush 28160;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L7:	aload_2;
+					sconst_1;
+					baload;
+					slookupswitch L15 7 32 L13 33 L11 34 L14 48 L10 64 L12 80 L9 112 L8;
+				L8:	aload_0;
+					aload_1;
+					invokespecial 12;		// ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.getCVMList(Ljavacard/framework/APDU;)V
+					goto L16;
+				L9:	aload_0;
+					aload_1;
+					invokespecial 13;		// ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.getBalance(Ljavacard/framework/APDU;)V
+					goto L16;
+				L10:	aload_0;
+					aload_1;
+					invokespecial 14;		// ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.credit(Ljavacard/framework/APDU;)V
+					goto L16;
+				L11:	aload_0;
+					aload_1;
+					invokespecial 15;		// ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.verifyPlain(Ljavacard/framework/APDU;)V
+					goto L16;
+				L12:	aload_0;
+					aload_1;
+					invokespecial 16;		// ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.debit(Ljavacard/framework/APDU;)V
+					goto L16;
+				L13:	aload_0;
+					aload_1;
+					invokespecial 17;		// ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.verifyNone(Ljavacard/framework/APDU;)V
+					goto L16;
+				L14:	aload_0;
+					aload_1;
+					invokespecial 18;		// ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.verifyEncrypted(Ljavacard/framework/APDU;)V
+					goto L16;
+				L15:	sspush 27904;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L16:	return;
+		}
+
+		.method private verifyEncrypted(Ljavacard/framework/APDU;)V {
+			.stack 6;
+			.locals 7;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 9;		// getBuffer()[B
+					astore_2;
+				L1:	aload_1;
+					invokevirtual 20;		// setIncomingAndReceive()S
+					s2b;
+					sstore_3;
+				L2:	bspush 64;
+					newarray 11;
+					dup;
+					sconst_0;
+					bspush 33;
+					bastore;
+					dup;
+					sconst_1;
+					bspush 74;
+					bastore;
+					dup;
+					sconst_2;
+					bspush 80;
+					bastore;
+					dup;
+					sconst_3;
+					bspush -86;
+					bastore;
+					dup;
+					sconst_4;
+					bspush -87;
+					bastore;
+					dup;
+					sconst_5;
+					bspush 90;
+					bastore;
+					dup;
+					bspush 6;
+					bspush -98;
+					bastore;
+					dup;
+					bspush 7;
+					bspush -59;
+					bastore;
+					dup;
+					bspush 8;
+					bspush -85;
+					bastore;
+					dup;
+					bspush 9;
+					bspush -62;
+					bastore;
+					dup;
+					bspush 10;
+					bspush 98;
+					bastore;
+					dup;
+					bspush 11;
+					bspush -64;
+					bastore;
+					dup;
+					bspush 12;
+					bspush 76;
+					bastore;
+					dup;
+					bspush 13;
+					bspush 32;
+					bastore;
+					dup;
+					bspush 14;
+					bspush 24;
+					bastore;
+					dup;
+					bspush 15;
+					bspush -40;
+					bastore;
+					dup;
+					bspush 16;
+					bspush -100;
+					bastore;
+					dup;
+					bspush 17;
+					bspush 89;
+					bastore;
+					dup;
+					bspush 18;
+					bspush 79;
+					bastore;
+					dup;
+					bspush 19;
+					bspush 99;
+					bastore;
+					dup;
+					bspush 20;
+					bspush -71;
+					bastore;
+					dup;
+					bspush 21;
+					bspush 64;
+					bastore;
+					dup;
+					bspush 22;
+					bspush -101;
+					bastore;
+					dup;
+					bspush 23;
+					bspush -39;
+					bastore;
+					dup;
+					bspush 24;
+					bspush -106;
+					bastore;
+					dup;
+					bspush 25;
+					bspush 89;
+					bastore;
+					dup;
+					bspush 26;
+					bspush -38;
+					bastore;
+					dup;
+					bspush 27;
+					bspush -85;
+					bastore;
+					dup;
+					bspush 28;
+					bspush 58;
+					bastore;
+					dup;
+					bspush 29;
+					bspush -121;
+					bastore;
+					dup;
+					bspush 30;
+					bspush 24;
+					bastore;
+					dup;
+					bspush 31;
+					sconst_2;
+					bastore;
+					dup;
+					bspush 32;
+					bspush 118;
+					bastore;
+					dup;
+					bspush 33;
+					bspush -25;
+					bastore;
+					dup;
+					bspush 34;
+					sconst_2;
+					bastore;
+					dup;
+					bspush 36;
+					bspush -42;
+					bastore;
+					dup;
+					bspush 37;
+					bspush -10;
+					bastore;
+					dup;
+					bspush 38;
+					bspush 46;
+					bastore;
+					dup;
+					bspush 39;
+					bspush -37;
+					bastore;
+					dup;
+					bspush 40;
+					bspush 89;
+					bastore;
+					dup;
+					bspush 41;
+					bspush -70;
+					bastore;
+					dup;
+					bspush 42;
+					bspush -14;
+					bastore;
+					dup;
+					bspush 43;
+					bspush 122;
+					bastore;
+					dup;
+					bspush 44;
+					bspush 93;
+					bastore;
+					dup;
+					bspush 45;
+					bspush -49;
+					bastore;
+					dup;
+					bspush 46;
+					bspush 14;
+					bastore;
+					dup;
+					bspush 47;
+					bspush 119;
+					bastore;
+					dup;
+					bspush 48;
+					bspush 7;
+					bastore;
+					dup;
+					bspush 49;
+					bspush -36;
+					bastore;
+					dup;
+					bspush 50;
+					bspush -69;
+					bastore;
+					dup;
+					bspush 51;
+					bspush -23;
+					bastore;
+					dup;
+					bspush 52;
+					bspush 104;
+					bastore;
+					dup;
+					bspush 53;
+					bspush -67;
+					bastore;
+					dup;
+					bspush 54;
+					bspush -49;
+					bastore;
+					dup;
+					bspush 55;
+					bspush 37;
+					bastore;
+					dup;
+					bspush 56;
+					bspush 75;
+					bastore;
+					dup;
+					bspush 57;
+					bspush 117;
+					bastore;
+					dup;
+					bspush 58;
+					bspush -90;
+					bastore;
+					dup;
+					bspush 59;
+					bspush 38;
+					bastore;
+					dup;
+					bspush 60;
+					bspush 47;
+					bastore;
+					dup;
+					bspush 61;
+					bspush 96;
+					bastore;
+					dup;
+					bspush 62;
+					bspush -92;
+					bastore;
+					dup;
+					bspush 63;
+					bspush 77;
+					bastore;
+					astore 4;
+				L3:	bspush 64;
+					newarray 11;
+					dup;
+					sconst_0;
+					bspush -57;
+					bastore;
+					dup;
+					sconst_1;
+					bspush -67;
+					bastore;
+					dup;
+					sconst_2;
+					bspush -29;
+					bastore;
+					dup;
+					sconst_3;
+					sconst_m1;
+					bastore;
+					dup;
+					sconst_4;
+					bspush -8;
+					bastore;
+					dup;
+					sconst_5;
+					bspush 31;
+					bastore;
+					dup;
+					bspush 6;
+					bspush -72;
+					bastore;
+					dup;
+					bspush 7;
+					bspush -94;
+					bastore;
+					dup;
+					bspush 8;
+					bspush 6;
+					bastore;
+					dup;
+					bspush 9;
+					bspush -114;
+					bastore;
+					dup;
+					bspush 10;
+					bspush 80;
+					bastore;
+					dup;
+					bspush 11;
+					bspush -127;
+					bastore;
+					dup;
+					bspush 12;
+					bspush -56;
+					bastore;
+					dup;
+					bspush 13;
+					bspush -64;
+					bastore;
+					dup;
+					bspush 14;
+					bspush -107;
+					bastore;
+					dup;
+					bspush 15;
+					bspush 19;
+					bastore;
+					dup;
+					bspush 16;
+					bspush -86;
+					bastore;
+					dup;
+					bspush 17;
+					bspush 23;
+					bastore;
+					dup;
+					bspush 18;
+					bspush -36;
+					bastore;
+					dup;
+					bspush 19;
+					bspush 86;
+					bastore;
+					dup;
+					bspush 20;
+					bspush 87;
+					bastore;
+					dup;
+					bspush 21;
+					bspush -125;
+					bastore;
+					dup;
+					bspush 22;
+					bspush -89;
+					bastore;
+					dup;
+					bspush 23;
+					bspush 25;
+					bastore;
+					dup;
+					bspush 24;
+					bspush -122;
+					bastore;
+					dup;
+					bspush 25;
+					bspush 27;
+					bastore;
+					dup;
+					bspush 26;
+					bspush 32;
+					bastore;
+					dup;
+					bspush 27;
+					sconst_3;
+					bastore;
+					dup;
+					bspush 28;
+					bspush 95;
+					bastore;
+					dup;
+					bspush 29;
+					bspush 42;
+					bastore;
+					dup;
+					bspush 30;
+					bspush -112;
+					bastore;
+					dup;
+					bspush 31;
+					bspush 16;
+					bastore;
+					dup;
+					bspush 32;
+					bspush -113;
+					bastore;
+					dup;
+					bspush 33;
+					bspush 47;
+					bastore;
+					dup;
+					bspush 34;
+					bspush -118;
+					bastore;
+					dup;
+					bspush 35;
+					bspush 57;
+					bastore;
+					dup;
+					bspush 36;
+					bspush 101;
+					bastore;
+					dup;
+					bspush 37;
+					bspush -93;
+					bastore;
+					dup;
+					bspush 38;
+					bspush 108;
+					bastore;
+					dup;
+					bspush 39;
+					bspush -128;
+					bastore;
+					dup;
+					bspush 40;
+					bspush 88;
+					bastore;
+					dup;
+					bspush 41;
+					bspush -123;
+					bastore;
+					dup;
+					bspush 42;
+					bspush -23;
+					bastore;
+					dup;
+					bspush 43;
+					bspush -26;
+					bastore;
+					dup;
+					bspush 44;
+					sconst_5;
+					bastore;
+					dup;
+					bspush 45;
+					bspush 38;
+					bastore;
+					dup;
+					bspush 46;
+					bspush 11;
+					bastore;
+					dup;
+					bspush 47;
+					bspush 70;
+					bastore;
+					dup;
+					bspush 48;
+					bspush -123;
+					bastore;
+					dup;
+					bspush 49;
+					bspush -44;
+					bastore;
+					dup;
+					bspush 50;
+					bspush -47;
+					bastore;
+					dup;
+					bspush 51;
+					bspush 13;
+					bastore;
+					dup;
+					bspush 52;
+					bspush -106;
+					bastore;
+					dup;
+					bspush 53;
+					bspush 90;
+					bastore;
+					dup;
+					bspush 54;
+					bspush 64;
+					bastore;
+					dup;
+					bspush 55;
+					bspush -52;
+					bastore;
+					dup;
+					bspush 56;
+					bspush -112;
+					bastore;
+					dup;
+					bspush 57;
+					bspush -14;
+					bastore;
+					dup;
+					bspush 58;
+					bspush 127;
+					bastore;
+					dup;
+					bspush 59;
+					bspush -85;
+					bastore;
+					dup;
+					bspush 60;
+					bspush 66;
+					bastore;
+					dup;
+					bspush 61;
+					bspush -83;
+					bastore;
+					dup;
+					bspush 62;
+					bspush -126;
+					bastore;
+					dup;
+					bspush 63;
+					bspush 37;
+					bastore;
+					astore 5;
+				L4:	sconst_5;
+					sspush 512;
+					sconst_0;
+					invokestatic 21;		// javacard/security/KeyBuilder.buildKey(BSZ)Ljavacard/security/Key;
+					checkcast 0 22;		// T_CLASSORINTERFACE javacard/security/RSAPrivateKey
+					astore 6;
+				L5:	aload 6;
+					aload 5;
+					sconst_0;
+					aload 5;
+					arraylength;
+					invokeinterface 4 22 7;		// javacard/security/RSAPrivateKey
+					aload 6;
+					aload 4;
+					sconst_0;
+					aload 4;
+					arraylength;
+					invokeinterface 4 22 6;		// javacard/security/RSAPrivateKey
+					bspush 10;
+					sconst_0;
+					invokestatic 23;		// javacardx/crypto/Cipher.getInstance(BZ)Ljavacardx/crypto/Cipher;
+					astore 7;
+				L6:	aload 7;
+					aload 6;
+					sconst_1;
+					invokevirtual 24;		// init(Ljavacard/security/Key;B)V
+					sload_3;
+					newarray 11;
+					astore 8;
+				L7:	aload 7;
+					aload_2;
+					sconst_5;
+					sload_3;
+					aload 8;
+					sconst_0;
+					invokevirtual 25;		// doFinal([BSS[BS)S
+					pop;
+					getfield_a_this 0;		// reference ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.pin
+					aload 8;
+					sconst_0;
+					getfield_s_this 1;		// short ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.pinSize
+					s2b;
+					invokevirtual 26;		// check([BSB)Z
+					ifne L9;
+				L8:	sspush 25344;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L9:	sconst_1;
+					putfield_b_this 2;		// boolean ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.isValidated
+				L10:	goto L14;
+				L11:	astore 4;
+				L12:	aload 4;
+					invokevirtual 28;		// getReason()S
+					sstore 5;
+				L13:	sload 5;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L14:	return;
+			.exceptionTable {
+				// start_block end_block handler_block catch_type_index
+				L2 L10 L11 19;
+			}
+		}
+
+		.method private credit(Ljavacard/framework/APDU;)V {
+			.stack 3;
+			.locals 6;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 9;		// getBuffer()[B
+					astore_2;
+				L1:	aload_2;
+					sconst_4;
+					baload;
+					sstore_3;
+				L2:	aload_1;
+					invokevirtual 20;		// setIncomingAndReceive()S
+					s2b;
+					sstore 4;
+				L3:	sload_3;
+					sconst_2;
+					if_scmpne L5;
+				L4:	sload 4;
+					sconst_2;
+					if_scmpeq L6;
+				L5:	sspush 26368;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L6:	aload_2;
+					sconst_5;
+					baload;
+					sstore 5;
+				L7:	aload_2;
+					bspush 6;
+					baload;
+					sstore 6;
+				L8:	sload 5;
+					bspush 8;
+					sshl;
+					sload 6;
+					sadd;
+					sstore 7;
+				L9:	sload 7;
+					sspush 1000;
+					if_scmpgt L11;
+				L10:	sload 7;
+					ifge L12;
+				L11:	sspush 27267;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L12:	getfield_s_this 3;		// short ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.balance
+					sload 7;
+					sadd;
+					sspush 10000;
+					if_scmple L14;
+				L13:	sspush 27268;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L14:	aload_0;
+					getfield_s_this 3;		// short ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.balance
+					sload 7;
+					sadd;
+					putfield_s 3;		// short ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.balance
+					return;
+		}
+
+		.method private getBalance(Ljavacard/framework/APDU;)V {
+			.stack 4;
+			.locals 2;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 9;		// getBuffer()[B
+					astore_2;
+				L1:	aload_1;
+					invokevirtual 30;		// setOutgoing()S
+					sstore_3;
+				L2:	sload_3;
+					sconst_2;
+					if_scmpge L4;
+				L3:	sspush 26368;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L4:	aload_1;
+					sconst_2;
+					invokevirtual 31;		// setOutgoingLength(S)V
+					aload_2;
+					sconst_0;
+					getfield_s_this 3;		// short ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.balance
+					bspush 8;
+					sshr;
+					s2b;
+					bastore;
+					aload_2;
+					sconst_1;
+					getfield_s_this 3;		// short ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.balance
+					sspush 255;
+					sand;
+					s2b;
+					bastore;
+					aload_1;
+					sconst_0;
+					sconst_2;
+					invokevirtual 32;		// sendBytes(SS)V
+					return;
+		}
+
+		.method private getCVMList(Ljavacard/framework/APDU;)V {
+			.stack 4;
+			.locals 4;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 9;		// getBuffer()[B
+					astore_2;
+				L1:	aload_1;
+					invokevirtual 30;		// setOutgoing()S
+					sstore_3;
+				L2:	sload_3;
+					sconst_2;
+					if_scmpge L4;
+				L3:	sspush 26368;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L4:	aload_1;
+					bspush 14;
+					invokevirtual 31;		// setOutgoingLength(S)V
+					bipush 50;
+					iconst_4;
+					invokestatic 33;		// ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.intToBytes(II)[B
+					astore 4;
+				L5:	bipush 100;
+					iconst_4;
+					invokestatic 33;		// ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.intToBytes(II)[B
+					astore 5;
+				L6:	aload_2;
+					sconst_0;
+					aload 4;
+					sconst_3;
+					baload;
+					bastore;
+					aload_2;
+					sconst_1;
+					aload 4;
+					sconst_2;
+					baload;
+					bastore;
+					aload_2;
+					sconst_2;
+					aload 4;
+					sconst_1;
+					baload;
+					bastore;
+					aload_2;
+					sconst_3;
+					aload 4;
+					sconst_0;
+					baload;
+					bastore;
+					aload_2;
+					sconst_4;
+					aload 5;
+					sconst_3;
+					baload;
+					bastore;
+					aload_2;
+					sconst_5;
+					aload 5;
+					sconst_2;
+					baload;
+					bastore;
+					aload_2;
+					bspush 6;
+					aload 5;
+					sconst_1;
+					baload;
+					bastore;
+					aload_2;
+					bspush 7;
+					aload 5;
+					sconst_0;
+					baload;
+					bastore;
+					aload_2;
+					bspush 8;
+					bspush 31;
+					bastore;
+					aload_2;
+					bspush 9;
+					bspush 6;
+					bastore;
+					aload_2;
+					bspush 10;
+					sconst_1;
+					bastore;
+					aload_2;
+					bspush 11;
+					bspush 8;
+					bastore;
+					aload_2;
+					bspush 12;
+					sconst_4;
+					bastore;
+					aload_2;
+					bspush 13;
+					bspush 9;
+					bastore;
+					aload_1;
+					sconst_0;
+					bspush 14;
+					invokevirtual 32;		// sendBytes(SS)V
+					return;
+		}
+
+		.method private debit(Ljavacard/framework/APDU;)V {
+			.stack 3;
+			.locals 6;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	getfield_b_this 2;		// boolean ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.isValidated
+					ifne L2;
+				L1:	sspush 25345;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L2:	aload_1;
+					invokevirtual 9;		// getBuffer()[B
+					astore_2;
+				L3:	aload_2;
+					sconst_4;
+					baload;
+					sstore_3;
+				L4:	aload_1;
+					invokevirtual 20;		// setIncomingAndReceive()S
+					s2b;
+					sstore 4;
+				L5:	sload_3;
+					sconst_2;
+					if_scmpne L7;
+				L6:	sload 4;
+					sconst_2;
+					if_scmpeq L8;
+				L7:	sspush 26368;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L8:	aload_2;
+					sconst_5;
+					baload;
+					sstore 5;
+				L9:	aload_2;
+					bspush 6;
+					baload;
+					sstore 6;
+				L10:	sload 5;
+					bspush 8;
+					sshl;
+					sload 6;
+					sadd;
+					sstore 7;
+				L11:	sload 7;
+					sspush 1000;
+					if_scmpgt L13;
+				L12:	sload 7;
+					ifge L14;
+				L13:	sspush 27267;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L14:	getfield_s_this 3;		// short ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.balance
+					sload 7;
+					ssub;
+					ifge L16;
+				L15:	sspush 27269;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L16:	aload_0;
+					getfield_s_this 3;		// short ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.balance
+					sload 7;
+					ssub;
+					putfield_s 3;		// short ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.balance
+					sconst_0;
+					putfield_b_this 2;		// boolean ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.isValidated
+					return;
+		}
+
+		.method private verifyNone(Ljavacard/framework/APDU;)V {
+			.stack 2;
+			.locals 0;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	sconst_1;
+					putfield_b_this 2;		// boolean ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.isValidated
+					return;
+		}
+
+		.method private verifyPlain(Ljavacard/framework/APDU;)V {
+			.stack 4;
+			.locals 2;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 9;		// getBuffer()[B
+					astore_2;
+				L1:	aload_1;
+					invokevirtual 20;		// setIncomingAndReceive()S
+					s2b;
+					sstore_3;
+				L2:	getfield_a_this 0;		// reference ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.pin
+					aload_2;
+					sconst_5;
+					sload_3;
+					invokevirtual 26;		// check([BSB)Z
+					ifne L4;
+				L3:	sspush 25344;
+					invokestatic 11;		// javacard/framework/ISOException.throwIt(S)V
+				L4:	sconst_1;
+					putfield_b_this 2;		// boolean ro/uaic/info/sca/cardholderapp/CardHolderVerificationApplet.isValidated
+					return;
+		}
+
+		.method public static intToBytes(II)[B 2 {
+			.stack 6;
+			.locals 2;
+
+				L0:	iload_2;
+					i2b;
+					newarray 11;
+					astore 4;
+				L1:	sconst_0;
+					sstore 5;
+				L2:	goto L4;
+				L3:	aload 4;
+					sload 5;
+					iload_0;
+					sipush 255;
+					iand;
+					i2b;
+					bastore;
+					sload 5;
+					sconst_1;
+					sadd;
+					s2b;
+					sstore 5;
+					iload_0;
+					bipush 8;
+					iushr;
+					istore_0;
+				L4:	sload 5;
+					s2i;
+					iload_2;
+					icmp;
+					iflt L3;
+				L5:	aload 4;
+					areturn;
+		}
+
+	}
+
+	.class final CardHolderVerificationAppletStrings extends 3.0 {		// extends java/lang/Object
+
+		.fields {
+			static final byte[] Package = {114,111,46,117,97,105,99,46,105,110,102,111,46,115,99,97,46,99,97,114,100,104,111,108,100,101,114,97,112,112};		// [B
+			static final byte[] AppletName = {67,97,114,100,72,111,108,100,101,114,86,101,114,105,102,105,99,97,116,105,111,110,65,112,112,108,101,116};		// [B
+		}
+
+		.publicMethodTable 1 {
+			equals(Ljava/lang/Object;)Z;
+		}
+
+		.packageMethodTable 0 {
+		}
+
+		.method  <init>()V {
+			.stack 1;
+			.locals 0;
+
+				L0:	aload_0;
+					invokespecial 34;		// java/lang/Object.<init>()V
+					return;
+		}
+
+	}
+
+}

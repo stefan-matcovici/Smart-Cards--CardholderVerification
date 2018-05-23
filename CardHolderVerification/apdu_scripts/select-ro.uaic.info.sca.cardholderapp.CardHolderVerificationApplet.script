@@ -1,0 +1,10 @@
+// Applet Selection APDU Script
+//
+// Package:     ro.uaic.info.sca.cardholderapp
+// Package AID: //aid/0606060606/00
+// Applet:      CardHolderVerificationApplet
+// Applet AID:  //aid/0606060606/01
+//
+
+// Select CardHolderVerificationApplet applet
+0x00 0xA4 0x04 0x00 0x06 0x06 0x06 0x06 0x06 0x06 0x01 0x7F;
